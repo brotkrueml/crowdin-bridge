@@ -16,17 +16,15 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:status:project',
-    description: 'Export extension translation status',
-    hidden: false
+    description: 'Export extension translation status used for TER',
 )]
-class ProjectStatusCommand extends Command
+final class ProjectStatusCommand extends Command
 {
     public function __construct(
-        protected readonly BridgeConfiguration $bridgeConfiguration,
-        protected readonly ExportExtensionTranslationStatusService $translationStatusService,
-        ?string $name = null
+        private readonly BridgeConfiguration $bridgeConfiguration,
+        private readonly ExportExtensionTranslationStatusService $translationStatusService,
     ) {
-        parent::__construct($name);
+        parent::__construct();
     }
 
     protected function configure()
@@ -63,7 +61,7 @@ class ProjectStatusCommand extends Command
         return Command::SUCCESS;
     }
 
-    protected function exportProject(string $extensionKey, bool $verbose, SymfonyStyle $io)
+    private function exportProject(string $extensionKey, bool $verbose, SymfonyStyle $io)
     {
         if ($verbose) {
             $io->title(sprintf('Project %s', $extensionKey));
